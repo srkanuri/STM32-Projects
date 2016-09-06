@@ -1,2 +1,5 @@
-# CS-Fall2016
-Source code for the Discovery Board and Lab reports
+# Fall2016-lab
+
+
+Please check the Wiki for errata on lab experiements.
+
