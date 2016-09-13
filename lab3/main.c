@@ -11,7 +11,20 @@ void delay(void) {
 }
 
 int main(void) {
-  while(1);
+  f3d_led_init();
+  f3d_user_btn_init();
+  f3d_led_all_off();
+  int led_cnt = 0;
+  while(1){
+    if(led_cnt == 8)
+      led_cnt =0;
+    f3d_led_on(led_cnt);
+    delay();
+    while(user_btn_read());
+    f3d_led_off(led_cnt);
+    led_cnt++;
+  }
+  //while(1);
 }
 
 #ifdef USE_FULL_ASSERT
