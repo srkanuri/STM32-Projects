@@ -1,13 +1,22 @@
-/**********************************
- *f3d_user_btn.c 
- *contains the init and read functions for the User Button
- *********************************/
+/***************************************************************
+ * f3d_user_btn.c - contains the init and read functions for the User Button
+ *
+ * Authors: Srikanth Kanuri (srkanuri)
+ *          Raghavendra Nataraj (natarajr)
+ * Date Created: 09/15/2016
+ * Last Modified by: Srikanth Kanuri
+ * Date Last Modified: 09/15/2016
+ * Assignment: Lab3
+ * Part of: Lab3
+ ***************************************************************/
 #include <stm32f30x.h>
 #include <stm32f30x_gpio.h>
 #include <stm32f30x_rcc.h>
 
 
-/*Initialization of the UserButton*/
+// Function Name: f3d_user_btn_init
+// Description: Initialization of the UserButton
+// Return Type: void
 void f3d_user_btn_init(void){
   GPIO_InitTypeDef GPIO_InitStructure;
   GPIO_StructInit(&GPIO_InitStructure);
@@ -18,7 +27,9 @@ void f3d_user_btn_init(void){
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
-/*reads the User Button*/
+// Function Name: f3d_btn_read
+// Description: reads the User Button
+// Return Type: int
 int user_btn_read(void){
   return GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0);
 }

@@ -1,0 +1,33 @@
+ ***************************************************************
+ * Team: Srikanth Kanuri (srkanuri)
+ *       Raghavendra Nataraj (natarajr)
+ * Date Created: 09/15/2016
+ * Assignment: Lab3
+ ***************************************************************
+  **************          LAB3 REPORT         *****************
+ ***************************************************************
+
+1. What are specs of the board you are using (ex. Speed, RAM, Flash)?
+A: STM32 F100 processor with a speed of 24Mhz and having a RAM of 8 KB and a Flash Memory of 128 KB.
+
+2. What does GPIO stand for?
+A: General Purpose Input Output.
+
+3. Is the provided delay function accurate? Why or why not? EDIT This question will be disregarded as this delay function does not have parameter Sorry for the confusion
+A: The delay function provided is accurate as the human eye can observe the change using the delay function.
+
+4. What are the Port and Pin Numbers of the two Green LEDs?
+A: Port E : Pins 11 and 15 (PE11 and PE15)
+
+5. What are the public attributes of the GPIO_InitTypeDef Struct?
+A: GPIO_Pin, GPIO_Mode, GPIO_Speed, GPIO_OType, GPIO_PuPd
+
+Difficulties:
+There were no major roadblocks in doing this Lab, but we wanted to try out new things and tried various other ways of invoking LED output and taking User Input.
+It was a pleasure to program the LEDs to blink and bringing in the user input.
+
+Learnings:
+We understood how to make and download the code to STM32
+We learnt about GPIO_InitTypeDef which is the structure used to initialize any pin.
+We learnt about the importance of enabling clock for the GPIO prior to configuration.
+

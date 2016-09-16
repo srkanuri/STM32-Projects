@@ -1,8 +1,21 @@
+/***************************************************************
+ * main.c - Lab3 Main Program
+ *
+ * Authors: Srikanth Kanuri (srkanuri)
+ *          Raghavendra Nataraj (natarajr)
+ * Date Created: 09/15/2016
+ * Last Modified by: Srikanth Kanuri
+ * Date Last Modified: 09/15/2016
+ * Assignment: Lab3
+ * Part of: Lab3
+ ***************************************************************/
 #include <stm32f30x.h>  // Pull in include files for F30x standard drivers 
 #include <f3d_led.h>     // Pull in include file for the local drivers
 #include <f3d_user_btn.h>
 
-// Simple looping delay function
+// Function Name: delay
+// Description: Simple looping delay function
+// Return Type: void
 void delay(void) {
   int i = 2000000;
   while (i-- > 0) {
@@ -10,6 +23,9 @@ void delay(void) {
   }
 }
 
+// Function Name: main
+// Description: Main function for Lab3
+// Return Type: int
 int main(void) {
   f3d_led_init();
   f3d_user_btn_init();
@@ -24,7 +40,6 @@ int main(void) {
     f3d_led_off(led_cnt);
     led_cnt++;
   }
-  //while(1);
 }
 
 #ifdef USE_FULL_ASSERT
