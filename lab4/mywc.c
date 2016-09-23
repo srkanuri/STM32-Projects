@@ -13,6 +13,10 @@
 #include<stdlib.h>
 #include<unistd.h>
 
+//Function name: mywc
+//Description: Function to print the count of words until and escape is read
+//Parameters: None
+//Returns: Void
 void mywc(void) {
   int c;
   int numChar = 0;
