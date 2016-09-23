@@ -1,0 +1,34 @@
+***************************************************************
+ * Team: Srikanth Kanuri (srkanuri)
+ *       Brent Hall (hallba)
+ * Date Created: 09/23/2016
+ * Assignment: Lab4
+ ***************************************************************
+  **************          LAB4 REPORT         *****************
+ ***************************************************************
+
+1. How many connections are required to communicate over UART?
+A: There are 2 main connections needed for communication over UART : Recieve(RX) and Transmit(TX). 
+   We also have a ground connection which is already present in STM32
+
+2. What is the purpose of "alternate functions" for GPIO pins?
+A: UART's connections can be configured to certain GPIO pins in every port. This configuration can be done by an alternate function. 
+   We do not confgure any pin as input or output but rather set them to the Alternate function which will define them for us.
+
+3. Define "baud rate" in your own words.
+A: Baud rate is the rate of signals transmitted per second.
+
+4. Why do we need newlib_stubs? Specifically, is there a reason that printf won't work on the board without it?
+A: Newlib is a set libraries that are platform independent. It is expected that the programmer provides functions which an OS provides. 
+   The printf function wont work without newlib_stub since the hardware we have is not associated with any Operating system. 
+   Hence we need newlib_stub which is a platform independent library.
+
+5. Give an example of a situation in which the Salae Logic Analyzer is the best debugging method and include a screen shot of the Logic application.
+A: Salae Logic Analyzer is connected to STM32 board and will be useful to debug the signals transmitted to the board after code execution. 
+   This will be useful to debug if the gdb shows everything to be correct but the hardware signal doesnt work. 
+   In other words, it can be used to debug the hardware problems. It can be used also to identify the problems caused by clock mis-configuration.
+
+Learnings:
+We mainly learnt about using UART to perform serial communication
+We understood about alternate functions and how different pins can be used for serial communication by activating a different alternate function
+We learnt about newlib which is developed and maintained by Redhat and serves as a set of platform independent libraries which can be used in Embedded Systems like STM32.
