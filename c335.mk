@@ -30,7 +30,7 @@ LD_1=$(TOOLROOT)/arm-none-eabi-gcc
 LD = $(LD_$(V))
 
 DL_0 = @echo -n "Downloading"; $(DL_1)
-DL_1=st-flash 
+DL_1=$(TOOLROOT)/st-flash 
 DL = $(DL_$(V))
 
 OC_0 = @echo "Creating Bin Downloadable File"; $(OC_1)
