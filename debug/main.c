@@ -23,31 +23,31 @@ int gitBitsChar(unsigned char c, char answer[]){
     c=c>>1;
     i--;
   }
-  answer[7]=0;
+  answer[8]=0;
   return 0;
 }
 
 int gitBitsShort(unsigned short s, char answer[]){
-  int i = 16;
-  while(s<16){
+  int i = 15;
+  while(i>=0){
     if(s&1) answer[i] = '1';
     else answer[i] = '0';
-    s=s<<1;
-    i++;
+    s=s>>1;
+    i--;
   }
-  answer[i]=0;
+  answer[16]=0;
   return 0;
 }
 
 int gitBitsInt(int yikes, char answer[]){
-  int i = 0;
-  while(yikes<32){
+  int i = 31;
+  while(i>=0){
     if(yikes&1) answer[i] = '1';
     else answer[i] = '0';
-    yikes=yikes<<1;
-    i++;
+    yikes=yikes>>1;
+    i--;
   }
-  answer[i]=0;
+  answer[32]=0;
   return 0;
 }
 
@@ -59,17 +59,17 @@ int main(){
   setvbuf(stderr, NULL, _IONBF, 0);
   char ans1[32];
   char ans2[32];
-  char ans3[32];
-  char ans4[32];
+  char ans3[33];
+  char ans4[33];
   while (1){
     gitBitsShort((unsigned short) 3200, ans1);
     gitBitsChar((unsigned char) 'a', ans2);
     gitBitsInt(-94, ans3);
     gitBitsInt((unsigned int) 234, ans4);
-    printf("unsigned short 3200= %s\n", ans1);
+    printf("3200= %s\n", ans1);
     printf("unsigned a = %s\n", ans2);
     printf("-94 = %s\n", ans3);
-    printf("unsigned 234 = %s\n", ans4);
+    printf("unsigned int 234 = %s\n", ans4);
   }
  
 }
