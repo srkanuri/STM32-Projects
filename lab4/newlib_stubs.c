@@ -3,6 +3,7 @@
  * newlib_stubs.c
  *
  *  Created on: 2 Nov 2010
+ *      Updated By : Brent Hall (hallba) and Srikanth Kanuri (srkanuri)
  *      Author: nanoage.co.uk
  */
 
