@@ -1,5 +1,14 @@
-/* main.c 
-   debug this function using gdb*/
+/***************************************************************
+ * main.c - debug this function using gdb
+ *
+ * Authors: Srikanth Kanuri (srkanuri)
+ *          Daozhen Lu (daozlv)
+ * Date Created: 09/29/2016
+ * Last Modified by: Srikanth Kanuri
+ * Date Last Modified: 09/29/2016
+ * Assignment: Lab5
+ * Part of: Lab5
+ ***************************************************************/
 
 
 /*

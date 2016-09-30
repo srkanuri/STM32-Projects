@@ -1,4 +1,15 @@
 /* f3d_gyro.h */
+/***************************************************************
+ * f3d_gyro.h - Header file for gyro
+ *
+ * Authors: Srikanth Kanuri (srkanuri)
+ *          Daozhen Lu (daozlv)
+ * Date Created: 09/29/2016
+ * Last Modified by: Srikanth Kanuri
+ * Date Last Modified: 09/29/2016
+ * Assignment: Lab5
+ * Part of: Lab5
+ ***************************************************************/
 
 /* Code: */
 #include <stm32f30x.h>

@@ -1,7 +1,23 @@
+/***************************************************************
+ * f3d_gyro.c - contains the initialization basic i/o functions for gyro
+ *
+ * Authors: Srikanth Kanuri (srkanuri)
+ *          Daozhen Lu (daozlv)
+ * Date Created: 09/28/2016
+ * Last Modified by: Srikanth Kanuri
+ * Date Last Modified: 09/29/2016
+ * Assignment: Lab5
+ * Part of: Lab5
+ ***************************************************************/
+
 #include <f3d_gyro.h>
 #include <stm32f30x.h>
+
+//Function name: f3d_gyro_interface_init
+//Description: Configures and initializes the pins for gyro
+//Parameters: None
+//Return Type: Void
 void f3d_gyro_interface_init() {
-  //You must configure and initialize the following 4 pins
 
   //SCK PA5
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -16,7 +32,7 @@ void f3d_gyro_interface_init() {
   GPIO_PinAFConfig(GPIOA,5,GPIO_AF_5);
   
   //MOSI PA6 
-   GPIO_StructInit(&GPIO_InitStructure);
+  GPIO_StructInit(&GPIO_InitStructure);
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
@@ -26,7 +42,7 @@ void f3d_gyro_interface_init() {
   GPIO_PinAFConfig(GPIOA,6,GPIO_AF_5);
   
   //MISO PA7
- GPIO_StructInit(&GPIO_InitStructure);
+  GPIO_StructInit(&GPIO_InitStructure);
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
@@ -36,7 +52,7 @@ void f3d_gyro_interface_init() {
   GPIO_PinAFConfig(GPIOA,7,GPIO_AF_5);
   
   //CS PE3
-   GPIO_StructInit(&GPIO_InitStructure);
+  GPIO_StructInit(&GPIO_InitStructure);
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

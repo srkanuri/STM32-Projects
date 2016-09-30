@@ -1,0 +1,42 @@
+***************************************************************
+ * Team: Srikanth Kanuri (srkanuri)
+ *       Daozhen Lu (daozlv)
+ * Date Created: 09/29/2016
+ * Assignment: Lab5
+ ***************************************************************
+  **************          LAB5 REPORT         *****************
+ ***************************************************************
+
+1. What does the CS pin do (the CS pin is called SS in the lab manual)?
+A: The Chip Select or Slave Select is a signal which defines which slave the master is communicating with. 
+   All the slaves connected to the master will have a separate SS signal unlike MOSI, MISO and SCLK.
+   The master asserts the appropriate slave (sets the SS signal to 0) and starts the communication with it and ends it with setting the SS signal back to 1.
+
+2. Why do you set the CS high at the end of the pin initializations? What other functions in f3d_gyro.c change CS from low to high or high to low?
+A: CS pin set to high denotes that the master is not communicating with the slave.(also called "active low") 
+   We set this value to high so that when the communication with the slave is needed, the pin is set to low and this activates the peripheral.
+   Below are the functions which modify the CS pin values:   
+   Functions : "f3d_gyro_write" and "f3d_gyro_read" set the CS pin from high to low and low to high back again. 
+
+3. How do you hook up multiple peripherals on one SPI bus?
+A: We can setup multiple peripherals on a SPI bus by varying the CS pins for each peripheral. 
+   They can be connected by using the Alternate functions provided by STM32 board.
+
+4. The STM has an Operating Frequency of 72 MHz. When initializing SPI1, what do you set the baud rate prescaler to? What is the resulting SPI clock frequency?
+A: We set the baud rate prescalar to 8. (There are 3 possible baud rate prescalers we use : 2, 8 and 64)	 
+   Hence the resulting SPI clock frequency is 9 MHz (72/8).				    
+
+5. Does a peripheral (slave) need to be configured with the transmission speed before it can communicate with the microcontroler (master)? 
+   Why would you want to be able to do on-the-fly changes in transmission speed?
+A: The slave device does not need to be configured with transmission speed because the clock in managed by master (SCLK) for the entire communication.
+   The master knows in advance when the slave will communicate and how many bytes it will transmit. Hence it will generate the clock accordingly.
+   On-the-fly changes in transmission is possible for SPI and it is needed to connect multiple slave devices with differing speeds.
+
+
+Learning and Difficulties:
+. Learnt about debugging the code using gdb from the Discovery board and find out the issues with code in runtime.
+. Initialized the gyro and created the sendbyte, read, write and getdata functions to access values from gyroscope
+. Modified the uart library to create a new version of gerchar which does not wait until an input is encountered.
+. The challenging part was to make use of user button, leds, uart and gyro to implement angular velocity application.
+. We had problem with printing the gyro values on serialT where it was printing the same reading always. 
+  We were able to fix it with the small change on f3d_gyro.c.
