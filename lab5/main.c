@@ -1,4 +1,14 @@
-//main.c for lab6
+/***************************************************************
+ * main.c - Lab5 Main Program
+ *
+ * Authors: Srikanth Kanuri (srkanuri)
+ *          Daozhen Lu (daozlv)
+ * Date Created: 09/28/2016
+ * Last Modified by: Srikanth Kanuri
+ * Date Last Modified: 09/29/2016
+ * Assignment: Lab5
+ * Part of: Lab5
+ ***************************************************************/
 #include <f3d_uart.h>
 #include <f3d_gyro.h>
 #include <f3d_led.h>
@@ -12,6 +22,10 @@ void delay(void) {
   }
 }
 
+//Name : main
+//Description: Main fucntion to init and run the main logic for the angular velocity visualization application
+//Input: None
+//Output: int
 int main(void){
   setvbuf(stdin, NULL, _IONBF, 0);
   setvbuf(stdout, NULL, _IONBF, 0);
