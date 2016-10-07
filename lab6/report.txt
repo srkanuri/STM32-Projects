@@ -1,0 +1,39 @@
+***************************************************************
+ * Team: Raghavendra Nataraj (natarajr) 
+ *       Quintin Lepper (qlepper) 
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 10/07/2016
+ * Assignment: Lab6
+ ***************************************************************
+  **************          LAB6 REPORT         *****************
+ ***************************************************************
+
+1. Discuss the advantages and disadvantages of printf debugging? Note: there is no right answer to this, we are just looking for your thoughts on the issue
+A: The ease of debugging and flexibility are main advantages of printf debugging.
+   The disadvantages are that we cannot monitor the flow of code and will have to run the program everytime printf is value needs to be changed.
+   printf debugging can be used for small issues which can be easily identifiable but is best to gdb for bigger problems.
+
+2. Explain why the spiReadWrite function is called inside a higher level peripheral function (the lcdWrite function).
+A: 
+
+3. Why does LCD_CS_DEASSERT() do? Why is it important?
+A: LCD_CS_DEASSERT function sets the value of pin PB12 to high. The chip select signifies when the data is being transmitted and it is supposed to be low
+   for tranmission to happen. When we are setting the value to high, we are stopping any communication between the slave and master.
+
+4. Explain how the character data from the ASCII array in glcdfont.c gets converted to pixels.
+A: The character data values in the glcdfont denote the arragement of pixels to visually represent the the pixels of ASCII character on the LCD Screen.
+   Each ASCII character is printed on a 5X8 array and for each character data picked from glcdfont, the value is converted to boolean and a pixel is printed
+   to LCD whenever 1 is encoutered. The prints the character on the LCD. 
+
+5. Give the exact timing difference between the two versions of f3d_lcd_fillScreen, from the Salae analyzer, and explain why the new function is faster.
+A: 
+
+Include a logic analyzer screen shot of drawing to the LCD:
+The screenshots are present in lab6 folder with filenames: Screenshot from 2016-10-04 16-58-24.png, Screenshot from 2016-10-04 16-47-02.png
+
+Learnings and Challanges:
+We have used printf for debugging purposes and were able to critique it with respect to gdb.
+We have learnt how to connect the LCD display using the SPI communication protocol and print values to it using the provided helper functions.
+For the Gyro LCD display application, we implemented a graph for x, y, and z axis which can vary on the +ve and -ve ranges.
+The main challange we had was to vary the graph quickly with gyro changes and we tried tweaking with different placements for delay and also varied the delay loop.
+But no delay seems to have wokred the best for graph changes, though this leads to a flickering effect on x, y and z values printed.
