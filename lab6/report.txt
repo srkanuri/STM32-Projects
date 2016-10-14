@@ -1,4 +1,4 @@
-***************************************************************
+`***************************************************************
  * Team: Raghavendra Nataraj (natarajr) 
  *       Quintin Lepper (qlepper) 
  *       Srikanth Kanuri (srkanuri)
@@ -14,7 +14,9 @@ A: The ease of debugging and flexibility are main advantages of printf debugging
    printf debugging can be used for small issues which can be easily identifiable but is best to gdb for bigger problems.
 
 2. Explain why the spiReadWrite function is called inside a higher level peripheral function (the lcdWrite function).
-A: 
+A: The spiReadWrite function performs the process of sending data and receiving data using the buffers irrespective of whether the function is read or write.
+   The higher level functions will have the logic of setting the parameters to this function and it functions accordingly.
+   The values in rbuf and tbuf decide if the data is being recieved or transmitted.
 
 3. Why does LCD_CS_DEASSERT() do? Why is it important?
 A: LCD_CS_DEASSERT function sets the value of pin PB12 to high. The chip select signifies when the data is being transmitted and it is supposed to be low
@@ -26,7 +28,8 @@ A: The character data values in the glcdfont denote the arragement of pixels to 
    to LCD whenever 1 is encoutered. The prints the character on the LCD. 
 
 5. Give the exact timing difference between the two versions of f3d_lcd_fillScreen, from the Salae analyzer, and explain why the new function is faster.
-A: 
+A: 135 ms and 55 ms are the timing differences between both the versions of f3d_lcd_fillscreen. The first program used 2 loops to print each pixel.
+   But the second program prints the entire row with 1 instruction and doesnt need a loop altogether which makes it faster.
 
 Include a logic analyzer screen shot of drawing to the LCD:
 The screenshots are present in lab6 folder with filenames: Screenshot from 2016-10-04 16-58-24.png, Screenshot from 2016-10-04 16-47-02.png
