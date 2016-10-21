@@ -115,6 +115,7 @@ int main(void) {
     led_no = round(heading/45);
     if(user_btn_read())
       mode=(mode+1)%2;    
+    //Mode 0 - LEDs for Compass with reading in LCD
     if(mode == 0){
       f3d_lcd_fillScreen2(RED);
       printf("%d\n", led_no);
@@ -123,6 +124,7 @@ int main(void) {
       f3d_led_all_off();
       f3d_led_on((8-led_no)%8);
     }
+    //Mode 1 - Bar graph on LCD with text
     else{
       f3d_led_all_off();
       printf("Pitch : %f,\t Roll : %f\n",p_angle,r_angle);

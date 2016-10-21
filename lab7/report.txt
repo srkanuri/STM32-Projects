@@ -47,7 +47,7 @@ A:  The master device has to write to the slave to denote that it is expecting a
 
 Q3: What do the following lines of code do?
 A:  The code mentioend in this question is the calculation logic to obtain the accelerometer values in radians.
-    Each byte is added with a 8 bit shifted value. 
+    Each byte is added with a 8 bit shifted value to handle the float values.
 
 Q4: Why might it be necessary to tilt compensate your compass computation?
 A:  Tilt compensation is needed to get an accurate value of heading with respect to geographic north.
