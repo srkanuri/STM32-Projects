@@ -1,0 +1,55 @@
+ ***************************************************************
+ * Team: Raghavendra Nataraj (natarajr) 
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 10/20/2016
+ * Assignment: Lab7
+ ***************************************************************
+  **************          LAB7 REPORT         *****************
+ ***************************************************************
+Learnings and Challanges:
+We learnt about using the accelerometer and magnetometer in this lab.
+We calculated the tilt and heading data from the accelerometer and magnetometer readings.
+For the final application we implemented a compass on the basis of reading from heading.
+The Heading value is also displayed on the LCD. On user button press, we change the lcd data 
+to display the tilt data i.e. pitch and roll angle as a bar graph. In addition the tilt data is
+also shown as text.
+
+Q1: The accelerometer/magnetometer comes pre-wired on the STM board. Open up the the Data Sheet and find 
+    the page with the Pin Descriptions. How many pins does it have? List the pins and their names. 
+    Next find the electrical specifications under the Electrical Characteristics section. How many volts (Vdd) 
+    are required to power the accelerometer/magnetometer? The accelerometer/magnetometer is sitting somewhere 
+    on the STM board. Try to find it and describe where it is.
+A:  The device has 14 pins.
+    Pin 1:  Vdd_IO
+    Pin 2:  SCL
+    Pin 3:  SDA
+    Pin 4:  INT2
+    Pin 5:  INT1
+    Pin 6:  C1
+    Pin 7:  GND
+    Pin 8:  Reserved
+    Pin 9:  DRDY
+    Pin 10: Reserved
+    Pin 11: Reserved
+    Pin 12: SETP
+    Pin 13: SETC
+    Pin 14: Vdd
+
+    The Supply Voltage (Vdd) should be in the range of 2.16 - 3.6
+    The accelerometer/magnetometer is preset near the top right corner of STM32 as a rectangular chip like a gyroscope. 
+
+Q2: Why do we write to the accelerometer/magnetometer before we can read from them? What are the following lines of code doing?
+A:  The master device has to write to the slave to denote that it is expecting a read operation from slave.
+    Once the information is received and acknowledged, the slave can start sending the data to master.
+
+    The code mentioned in the question, holds the configuration settings for the slave.
+    They are to be written to slave before the actual operation can happen.
+
+Q3: What do the following lines of code do?
+A:  The code mentioend in this question is the calculation logic to obtain the accelerometer values in radians.
+    Each byte is added with a 8 bit shifted value. 
+
+Q4: Why might it be necessary to tilt compensate your compass computation?
+A:  Tilt compensation is needed to get an accurate value of heading with respect to geographic north.
+    For changes in Roll and Pitch there might be a slight change in the heading value and it needs to be compensated.
+    
