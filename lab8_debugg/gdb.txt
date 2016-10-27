@@ -1,0 +1,38 @@
+/***************************************************************
+ * main.c - Main program for Lab8 - Nunchuk
+ *
+ * Author: Raghavendra Nataraj (natarajr) 
+ *         Srikanth Kanuri (srkanuri)
+ * Date Created: 10/21/2016
+ * Last Modified by: Raghavendra Nataraj (natarajr)
+ * Date Last Modified: 10/27/2016
+ * Assignment: Lab8
+ * Part of: Lab8
+ ***************************************************************/
+
+CHECKPOINT 1:
+(gdb) info r
+r0     	       0x20000000	536870912
+r1     	       0x0	0
+r2     	       0x8000000        134217728
+r3     	       0xe000ed00	3758157056
+r4     	       0x92c	2348
+r5     	       0x0	0
+r6     	       0x0	0
+r7     	       0x0	0
+r8     	       0x0	0
+r9     	       0x0	0
+r10    	       0x0	0
+r11    	       0x0	0
+r12    	       0x0	0
+sp     	       0x20009ff8	0x20009ff8
+lr     	       0x8000273        134218355
+pc     	       0x800044c        0x800044c <main>
+cpsr   	       0x61000000	1627389952
+
+CHECKPOINT 2:
+Breakpoint 9, encryptStr (
+    phrase=0x800f3a4 "2F3-Discovery_FW_V1.1.0/Libraries/STM32F30x_StdPeriph_Driver/src/stm32f30x_rcc.c", phrase@entry=0x800f390 "cow", key=0x800f396 "G", 
+    key@entry=0x800f394	"PIG", 
+Address	0x2000a000 out of bounds>) at main.c:63
+

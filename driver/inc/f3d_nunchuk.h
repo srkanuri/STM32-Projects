@@ -5,8 +5,8 @@
  * Author: Bryce Himebaugh
  * Maintainer: 
  * Created: Thu Oct 31 09:41:40 2013
- * Last-Updated: 
- *           By: 
+ * Last-Updated: 10/27/2016
+ *           By: Raghavendra Nataraj(natarajr), Srikanth Kanuri(srkanuri)
  *     Update #: 0
  * Keywords: 
  * Compatibility: 
@@ -47,5 +47,6 @@ typedef struct nunchuk_data {
 
 void f3d_nunchuk_init(void);
 void f3d_nunchuk_read(nunchuk_t *);
+void f3d_nunchuk_read2(nunchuk_t *);
 
 /* f3d_nunchuk.h ends here */
