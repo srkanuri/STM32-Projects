@@ -17,7 +17,7 @@ A:  This is because of the I2C protocol which does not require any additional wi
     channel can be activated with the appropriate slave addressing. 
 
 Q2: What are the major differences between these two functions and what does that imply about communicating with the nunchuk?
-A:  
+A:  The nunchuck function supports multibyte read. But a nunchuck read does not. It also sends a 0 first before starting to read the data.
 
 Q3: What do all of these variables correspond to in the nunchuk? 
 A:  unsigned char jx   : Produces values for nunchuck's joystick movement on the horizontal axis (0 ... 255)
