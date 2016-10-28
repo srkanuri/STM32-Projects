@@ -1,5 +1,5 @@
 ELF=$(notdir $(CURDIR)).elf
-TOOLROOT=/l/arm2/gcc-arm-embedded/gcc-arm-none-eabi-4_8-2014q2/bin/
+TOOLROOT=/l/arm2/devtools/bin/
 
 CC=$(TOOLROOT)/arm-none-eabi-gcc
 LD=$(TOOLROOT)/arm-none-eabi-gcc
