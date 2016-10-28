@@ -1,0 +1,34 @@
+ ***************************************************************
+ * Team: Raghavendra Nataraj (natarajr) 
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 10/27/2016
+ * Assignment: Lab8
+ ***************************************************************
+  **************          LAB8 REPORT         *****************
+ ***************************************************************
+Learnings and Challanges:
+We learned further about the I2C by using a Nunchuk in a I2C protocol. We designed a menu styled user interface to step into previous lab visualizations.
+We also created a pin motion application to identify nunchuck's joystick movements and move a pin in the screen. Additionally, we used the c and z buttons 
+to work as enter and back respectively to move in and out of main menu. Alternatively once you have moved into a visualization, you can scroll through 
+visualizations using the joystick's left and right motion. We reduced and altered the screen refresh rates depending on the visualizations presented on screen.
+
+Q1: In previous labs, adding a peripheral has required pin initializations. Why were able to add the nunchuk without initializing anything?
+A:  This is because of the I2C protocol which does not require any additional wires and initializations like a Chip Select in SPI. All the devices in a I2C 
+    channel can be activated with the appropriate slave addressing. 
+
+Q2: What are the major differences between these two functions and what does that imply about communicating with the nunchuk?
+A:  
+
+Q3: What do all of these variables correspond to in the nunchuk? 
+A:  unsigned char jx   : Produces values for nunchuck's joystick movement on the horizontal axis (0 ... 255)
+    unsigned char jy   : Produces values for nunchuck's joystick movement on the vertical axis (0 ... 255)
+    unsigned short ax  : Produces values for nunchuck's accelerometer reading on x axis (0 ... 1023)
+    unsigned short ay  : Produces values for nunchuck's accelerometer reading on y axis (0 ... 1023)
+    unsigned short az  : Produces values for nunchuck's accelerometer reading on z axis (0 ... 1023)
+    unsigned char c    : Produces the value of nunchuck's c button press
+    unsigned char z    : Produces the value of nunchuck's z button press
+
+Q4: Explain the code above.
+A:  We take the last 2 bytes in the 6th byte of the read array which contains the values for c and z(nunchuk buttons). '&' operation with 0x03 ensures the same.
+    If the value is 0 the button is clicked and 1 if it is not clicked. We have a switch case to decide on the values of c and z buttons.
+    
