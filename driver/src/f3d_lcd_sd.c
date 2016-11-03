@@ -1,14 +1,14 @@
 /***************************************************************
- * f3d_lcd_sd.c - Debugging code using printf
+ * f3d_lcd_sd.c - Driver file for LCD
  *
  * Author: Raghavendra Nataraj (natarajr) 
  *         Quintin Lepper (qlepper) 
  *         Srikanth Kanuri (srkanuri)
  * Date Created: 09/30/2016
- * Last Modified by: Raghavendra Nataraj (natarajr)
- * Date Last Modified: 10/04/2016
- * Assignment: Lab6
- * Part of: Lab6
+ * Last Modified by: Srikanth Kanuri (srkanuri)
+ * Date Last Modified: 11/02/2016
+ * Assignment: Lab9, Lab6
+ * Part of: Lab9,Lab6
  ***************************************************************/
 
 /* Change log:
@@ -49,7 +49,7 @@ void f3d_lcd_sd_interface_init(void) {
 
   // RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
   //GPIO_StructInit(&GPIO_InitStructure);
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_9| GPIO_Pin_12 | GPIO_Pin_11;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_8 | GPIO_Pin_9| GPIO_Pin_12 | GPIO_Pin_11;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;

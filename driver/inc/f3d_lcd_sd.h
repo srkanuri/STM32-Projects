@@ -5,8 +5,8 @@
  * Author: Bryce Himebaugh
  * Maintainer: 
  * Created: Thu Oct 24 05:19:07 2013
- * Last-Updated: 
- *           By: 
+ * Last-Updated: 11/02/2016
+ *           By: Srikanth Kanuri(srkanuri), Raghavendra Nataraj(natarajr)
  *     Update #: 0
  * Keywords: 
  * Compatibility: 
@@ -54,8 +54,8 @@
 #define LCD_CS_DEASSERT()  GPIO_SetBits(GPIOB, GPIO_Pin_12)
 
 // Create these macros needed for the SD card interface in the ff9b code
-// #define SD_CS_HIGH() 
-// #define SD_CS_LOW()  
+#define SD_CS_HIGH() GPIO_SetBits(GPIOB, GPIO_Pin_8)
+#define SD_CS_LOW()  GPIO_ResetBits(GPIOB, GPIO_Pin_8)
 
 #define GPIO_PIN_SCE GPIO_Pin_12    
 
