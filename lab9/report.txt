@@ -1,0 +1,49 @@
+ ***************************************************************
+ * Team: Raghavendra Nataraj (natarajr) 
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 11/03/2016
+ * Assignment: Lab9
+ ***************************************************************
+  **************          LAB9 REPORT         *****************
+ ***************************************************************
+Learnings and Challanges:
+We worked on an Image display application along with the files display in the root directory. We did not handle the cases for more files than the screen size
+or directories but we consider this as a start. We understood how to initialize the SD card and also how the access the files from it in. We started with 
+displaying images by reducing the precision from 24 bit to 16 bit BMP image. Once this was complete, we added logic to change the orientation of image with  
+accelerometer's pitch and roll values. We tried to make it work first with drawPixel function. But since this is very slow, we changed the logic with pushColor.
+We have the complete picture in the Portrait mode and rescaled one for landscape. For every 5 lines of pixels, we removed 1 line of pixels so that the resultant 
+image fits the screen size in landscape. Converting the logic from drawPixel to pushColor was difficult to make it work in all the 4 orientations.
+
+Q1: What are we doing here and how does it relate to what we know about SPI?
+A:  We are adding a new chip select connection (PB8) for a new SPI communication device i.e the SD card. We also added the pin in f3d_lcd_sd.c driver to 
+    initialize the pin. The Chip Select pin is set to high when the device is not communicating and vice versa. SD_CS_HIGH() and SD_CS_LOW() are used for 
+    this purpose.
+
+Q2: Explain how you might use the *f3d_delay_uS()* function within the *delay()* function to replace the delay loop below. 
+    What would you expect to be the advantage of using a timer over a delay loop?
+A:  void delay(int count) {
+    	 while (count-- > 0) {
+    	       f3d_delay_uS(1000);
+    	       }
+  	 }
+    }
+
+    The advantage with using a timer over a delay loop is that the delay will be constant irrespective of the machine it is executed in.
+    The delay loop would differ based on the performance of processor.
+
+Q3: Why might DMA be important in improving the performance of your image display application?
+A:  Direct memory access would improve the performance of image display as the processor doesn't have to orchestrate the complete transfer and work on
+    other jobs which do not need memory. This way the processor gets to compute data in parallel to accessing image data from memory.
+
+Q4: Research the FAT file system and describe the function of the file allocation table. 
+    Explain how the corruption of an entry in the table can cause part of a file to be lost.
+A:  The functions of the file allocation table is to store the cluster associations of a file in order. If a file cluster is accessed and the next cluster
+    is needed, we can refer to the file allocation table. Generally 2 copies of file allocation table are saved in the file system to check if there is any
+    corruption in it. This is one of the essential functions of file allocation table to maintain consistency.
+
+    The table contains the list of all file clusters in order. If a file reading is in process and we find out that the file allocation table is 
+    corrupt from that point, the rest of the file cannot be retrieved and this part of file is lost.
+
+Q5: What is the difference between FAT16 and FAT32?
+A:  16 and 32 are the number of bits needed for an entry in file allocation table. Hence more files can be stored in FAT32 when compared to FAT16. 
+    The maximum memory storable in FAT16 is 4 GB. The file names can longer in FAT32 when compared to FAT16 file system.    
