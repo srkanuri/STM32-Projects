@@ -2,18 +2,26 @@
   * f3d_uart.c - contains the initialization basic i/o functions for UART
   *
   * Authors: Srikanth Kanuri (srkanuri)
-  *          Brent Hall (hallba)
-  *          Daozhen Lu (daozlv)
+  *          Raghavendra Nataraj (natarajr)
   * Date Created: 09/23/2016
   * Last Modified by: Srikanth Kanuri
-  * Date Last Modified: 09/29/2016
-  * Assignment: Lab4, Lab5
-  * Part of: Lab4, Lab5
+  * Date Last Modified: 11/09/2016
+  * Assignment: Lab4, Lab5, Lab10
+  * Part of: Lab4, Lab5, Lab10
  ***************************************************************/
 
 #include <stm32f30x.h>
+#include <stm32f30x_misc.h>
 #include <f3d_uart.h>
+#include <queue.h>
 
+static int TxPrimed = 0;
+int RxOverflow = 0;
+queue_t rxbuf, txbuf;
+
+void flush_uart(void) {
+  USART_ITConfig(USART1,USART_IT_TXE,ENABLE); 
+}
 
 //Function name: f3d_uart_init
 //Description: The initialization function for USART
@@ -39,6 +47,21 @@ void f3d_uart_init(void) {
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
   USART_Init(USART1 ,&USART_InitStructure);
   USART_Cmd(USART1 , ENABLE);
+
+  // Initialize the rx and tx queues
+  init_queue(&rxbuf);
+  init_queue(&txbuf);
+  
+  // Setup the NVIC priority and subpriority
+  NVIC_InitTypeDef NVIC_InitStructure;
+  NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x08;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x08;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+  // Enable the RX interrupt 
+  USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
 }
 
 
@@ -47,9 +70,14 @@ void f3d_uart_init(void) {
 //Parameters: int
 //Return Type: int
 int putchar(int c) {
-  while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == (uint16_t)RESET);
-  USART_SendData(USART1, c);
-  return 0;
+  //while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == (uint16_t)RESET);
+  //USART_SendData(USART1, c);
+  //return 0;
+  while(!enqueue(&txbuf , c));
+  if (!TxPrimed) {
+    TxPrimed = 1;
+    flush_uart();
+  }
 } 
 
 //Function name: getchar
@@ -57,9 +85,12 @@ int putchar(int c) {
 //Parameters: None
 //Return Type: int
 int getchar(void) {
-  while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == (uint16_t)RESET);
-  int c = USART_ReceiveData(USART1);
-  return c;
+  //while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == (uint16_t)RESET);
+  //int c = USART_ReceiveData(USART1);
+  //return c;
+  uint8_t data;
+  while(!dequeue(&rxbuf , &data));
+  return data;
 }
 
 //Function name: getchar
@@ -82,6 +113,31 @@ void putstring(char *s) {
   while(*s != '\0'){
     putchar(*s);
     s++;
+  }
+}
+
+
+void USART1_IRQHandler(void){
+  if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET){
+    uint8_t   data;
+    // buffer the data (or toss it if there's no room
+    // Flow control will prevent this
+    data = USART_ReceiveData(USART1) & 0xff;
+    if(!enqueue(&rxbuf , data))
+      RxOverflow = 1;
+  }
+  if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET){
+    uint8_t data;
+    /* Write one byte to the transmit data register */
+    if(dequeue(&txbuf , &data)){
+      USART_SendData(USART1, data);
+    }
+    else{
+      // if we have nothing to send, disable the interrupt
+      // and wait for a kick
+      USART_ITConfig(USART1, USART_IT_TXE , DISABLE);
+      TxPrimed = 0;
+    }
   }
 }
 

@@ -6,9 +6,9 @@
  * Maintainer: 
  * Created: Thu Feb  7 19:47:41 2013 (-0500)
  * Version: 
- * Last-Updated: 
- *           By: 
- *     Update #: 0
+ * Last-Updated: 11/09/2016
+ *           By: Raghavendra Nataraj(nataraj), Srikanth Kanuri(srkanuri)
+ *     Update #: 1
  * URL: 
  * Doc URL: 
  * Keywords: 
@@ -44,7 +44,8 @@
  */
 
 /* Code: */
-
+#include <stm32f30x.h>
+#include <stm32f30x_misc.h>
 #define QUEUE_SIZE 32
 
 typedef struct queue {
@@ -55,7 +56,7 @@ typedef struct queue {
 
 void init_queue(queue_t *);
 int enqueue(queue_t *, int);
-int dequeue(queue_t *);            
+int dequeue(queue_t *, uint8_t *);            
 int queue_empty(queue_t *);            
 
 /* queue.h ends here */
