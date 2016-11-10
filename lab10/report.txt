@@ -1,0 +1,14 @@
+ ***************************************************************
+ * Team: Raghavendra Nataraj (natarajr) 
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 11/10/2016
+ * Assignment: Lab10
+ ***************************************************************
+  **************          LAB10 REPORT         *****************
+ ***************************************************************
+Learnings and Challanges:
+We first implemented systick in raising interrupts in a periodic manner to change the LED blinks and implemented it as a replacement to delay function.
+This ensures that the delay is always constant in any devices used. We then implemented a circular queue for read and write transaction buffers to hold 
+values until dequeued for usage. We reimplmented the UART driver with interrupts. This avoids the busy waiting of CPU and makes way for asyncrhonous calls.
+
+We understood how the interrupts can work as alternative to polling and the way asynchronous calls work in the program.
