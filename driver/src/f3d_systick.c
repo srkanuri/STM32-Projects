@@ -43,10 +43,19 @@ volatile int systick_flag = 0;
 int led_cnt = 0;
 
 void f3d_systick_init(void) {
-  SysTick_Config(SystemCoreClock/12);
+  f3d_user_btn_init();
+  SysTick_Config(SystemCoreClock/100);
+}
+
+void f3d_systick_change(int interval){
+  SysTick_Config(SystemCoreClock/interval);
 }
 
 void SysTick_Handler(void) {
+  if(user_btn_read())
+    f3d_systick_change(10);
+  else
+    f3d_systick_change(100);
   f3d_led_off(led_cnt);
   led_cnt++;
   if(led_cnt == 8)
