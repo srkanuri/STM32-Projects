@@ -12,10 +12,10 @@ OBJDUMP=$(TOOLROOT)/arm-none-eabi-objdump
 CFLAGS = -g -mcpu=cortex-m0 -mthumb -specs=rdimon.specs -lc -lrdimon
 LDFLAGS =
 
-OBJS = test.o orrs.o
+OBJS = test.o alloc.o
 
 $(ELF) : $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@ -lc
 
 .s.o : 
 	$(AS) -g $< -o $@
@@ -25,17 +25,15 @@ $(ELF) : $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test : $(ELF)
-	$(QEMU)  -cpu cortex-m3 -nographic \
+	qemu-system-arm  -cpu cortex-m3 -nographic \
                    -monitor null -serial null \
-                   -machine integratorcp \
                    -semihosting -kernel $<
 
 debug: $(ELF)
-	$(QEMU) -cpu cortex-m3 -nographic -monitor null \
+	qemu-system-arm -cpu cortex-m3 -nographic -monitor null \
                  -serial null -semihosting -kernel \
-                   -machine integratorcp \
                  $< -gdb tcp::51234 -S &
-	arm-none-eabi-gdb $< --command=main.gdb
+	arm-none-eabi-gdb $< --command=../main.gdb
 
 clean: 
 	rm -f $(OBJS) $(ELF) $(OBJS:.o=.lst)
