@@ -102,9 +102,10 @@ void f3d_lcd_drawChar(uint8_t, uint8_t, unsigned char, uint16_t, uint16_t);
 void f3d_lcd_drawString(uint8_t, uint8_t, char *, uint16_t, uint16_t);
 
 int spiReadWrite(SPI_TypeDef *SPIx,uint8_t *rbuf,const uint8_t *tbuf, int cnt, uint16_t speed);
-int spiReadWrite16(SPI_TypeDef *SPIx,uint8_t *rbuf,const uint16_t *tbuf, int cnt,  uint16_t speed);
+int spiReadWrite16(SPI_TypeDef *SPIx,uint16_t *rbuf,const uint16_t *tbuf, int cnt,  uint16_t speed);
 static void LcdWrite(char dc,const char *data,int nbytes);
 static void LcdWrite16(char dc,const uint16_t *data,int cnt);
+static int xchng_datablock(SPI_TypeDef *SPIx, int half, const void *tbuf, void *rbuf, unsigned count);
 
 /* void f3d_sdcard_readwrite(uint8_t *, uint8_t *, int); */
 

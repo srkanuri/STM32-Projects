@@ -37,5 +37,7 @@
 
 void f3d_timer2_init(void);
 void f3d_timer2_setperiod(uint16_t period);
+void f3d_timer2_enable(uint32_t samplerate);
+void f3d_timer2_disable(void);
 
 /* f3d_timer2.h ends here */
