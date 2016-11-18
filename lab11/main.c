@@ -1,29 +1,14 @@
-/* main.c --- 
- * 
- * Filename: main.c
- * Description: 
- * Author: 
- * Maintainer: 
- * Created: Thu Jan 10 11:23:43 2013
- * Last-Updated: 
- *           By: 
- *     Update #: 0
- * Keywords: 
- * Compatibility: 
- * 
- */
-
-/* Commentary: 
- * 
- * 
- * 
- */
-
-/* Change log:
- * 
- * 
- */
-/* Code: */
+/***************************************************************
+ * main.c - Lab11 Main Program
+ *
+ * Authors: Srikanth Kanuri (srkanuri)
+ *          Raghavendra Nataraj (natarajr)
+ * Date Created: 11/11/2016
+ * Last Modified by: Srikanth Kanuri
+ * Date Last Modified: 11/17/2016
+ * Assignment: Lab11
+ * Part of: Lab11
+ ***************************************************************/
 
 #include <stm32f30x.h>  // Pull in include files for F30x standard drivers 
 #include <f3d_led.h>     // Pull in include file for the local drivers

@@ -1,27 +1,27 @@
 /***************************************************************
  * f3d_lcd_sd.c - Driver file for LCD
  *
- * Author: Raghavendra Nataraj (natarajr) 
- *         Quintin Lepper (qlepper) 
+ * Author: Raghavendra Nataraj (natarajr)
+ *         Quintin Lepper (qlepper)
  *         Srikanth Kanuri (srkanuri)
  * Date Created: 09/30/2016
  * Last Modified by: Srikanth Kanuri (srkanuri)
- * Date Last Modified: 11/02/2016
- * Assignment: Lab9, Lab6
- * Part of: Lab9,Lab6
+ * Date Last Modified: 11/17/2016
+ * Assignment: Lab9, Lab6, Lab11
+ * Part of: Lab9,Lab6, Lab11
  ***************************************************************/
 
 /* Change log:
- * 
- * 
+ *
+ *
  */
 
-/* Copyright (c) 2004-2007 The Trustees of Indiana University and 
- * Indiana University Research and Technology Corporation.  
- * 
- * All rights reserved. 
- * 
- * Additional copyrights may follow 
+/* Copyright (c) 2004-2007 The Trustees of Indiana University and
+ * Indiana University Research and Technology Corporation.
+ *
+ * All rights reserved.
+ *
+ * Additional copyrights may follow
  */
 
 /* Code: */
@@ -32,7 +32,7 @@
 static uint8_t madctlcurrent = MADVAL(MADCTLGRAPHICS);
 
 void f3d_lcd_sd_interface_init(void) {
- /**************** pin initialization for the LCD goes here *******************/ 
+ /**************** pin initialization for the LCD goes here *******************/
   GPIO_InitTypeDef GPIO_InitStructure;
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
@@ -46,7 +46,7 @@ void f3d_lcd_sd_interface_init(void) {
   GPIO_Init(GPIOB,&GPIO_InitStructure);
   GPIO_PinAFConfig(GPIOB,13,GPIO_AF_5);
   GPIO_PinAFConfig(GPIOB,14,GPIO_AF_5);
-  GPIO_PinAFConfig(GPIOB,15,GPIO_AF_5); 
+  GPIO_PinAFConfig(GPIOB,15,GPIO_AF_5);
  /*************** pin initialization for the LCD goes here ******************/
 
   // RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
@@ -56,7 +56,7 @@ void f3d_lcd_sd_interface_init(void) {
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_Init(GPIOB,&GPIO_InitStructure);
- 
+
   // Section 4.1 SPI2 configuration
   // Note: you will need to add some code in the last three functions
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2 , ENABLE);
@@ -73,8 +73,8 @@ void f3d_lcd_sd_interface_init(void) {
   SPI_Init(SPI2, &SPI_InitStructure);
   SPI_RxFIFOThresholdConfig(SPI2, SPI_RxFIFOThreshold_QF);
   SPI_Cmd(SPI2, ENABLE);
-  
-} 
+
+}
 
 
 struct lcd_cmdBuf {
@@ -144,7 +144,7 @@ void f3d_lcd_init(void) {
   // Make sure that the chip select and reset lines are deasserted
   LCD_CS_DEASSERT();              // Deassert Chip Select
 
-  LCD_RESET_DEASSERT();           
+  LCD_RESET_DEASSERT();
   delay(100);
   LCD_RESET_ASSERT();
   delay(100);
@@ -170,7 +170,7 @@ static void LcdWrite(char dc,const char *data,int nbytes) {
 }
 
 static void LcdWrite16(char dc,const uint16_t *data,int cnt) {
-  GPIO_WriteBit(LCD_PORT,GPIO_PIN_DC,dc); 
+  GPIO_WriteBit(LCD_PORT,GPIO_PIN_DC,dc);
   GPIO_ResetBits(LCD_PORT,GPIO_PIN_SCE);
   spiReadWrite16(SPILCD,0,data,cnt,LCDSPEED);
   GPIO_SetBits(LCD_PORT,GPIO_PIN_SCE);
@@ -179,7 +179,7 @@ static void LcdWrite16(char dc,const uint16_t *data,int cnt) {
 int spiReadWrite(SPI_TypeDef *SPIx, uint8_t *rbuf, const uint8_t *tbuf, int cnt, uint16_t speed) {
   int i;
   SPIx->CR1 = (SPIx->CR1 & ~SPI_BaudRatePrescaler_256) | speed;
-  
+
   if ((cnt > 4) && !(cnt & 1)) {
     return xchng_datablock(SPIx, 0, tbuf, rbuf , cnt);
   }
@@ -274,7 +274,7 @@ void f3d_lcd_drawPixel(uint8_t x, uint8_t y, uint16_t color) {
 void f3d_lcd_drawChar(uint8_t x, uint8_t y, unsigned char c, uint16_t color, uint16_t background_color) {
   int i, j;
   for (i = 0; i < 5; i++) {
-    for (j = 0; j < 8; j++){ 
+    for (j = 0; j < 8; j++){
       f3d_lcd_drawPixel(x+i,y+j, background_color);
     }
   }
@@ -303,14 +303,14 @@ void f3d_lcd_drawString(uint8_t x, uint8_t y, char *c, uint16_t color, uint16_t 
 static int xchng_datablock(SPI_TypeDef *SPIx, int half, const void *tbuf, void *rbuf, unsigned count) {
   DMA_InitTypeDef DMA_InitStructure;
   uint16_t dummy[] = {0xffff};
-  
+
   DMA_Channel_TypeDef *rxChan;
   DMA_Channel_TypeDef *txChan;
   uint32_t dmaflag;
-  
+
   if (count & 1)
     return -1;
-  
+
   if (SPIx == SPI1) {
     rxChan = DMA1_Channel2;
     txChan = DMA1_Channel3;
@@ -323,7 +323,7 @@ static int xchng_datablock(SPI_TypeDef *SPIx, int half, const void *tbuf, void *
   }
   else
     return -1;
-  
+
   DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&(SPIx->DR));
   if (half) {
     DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
@@ -338,7 +338,7 @@ static int xchng_datablock(SPI_TypeDef *SPIx, int half, const void *tbuf, void *
   DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
   DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
   DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
-  
+
   DMA_DeInit(rxChan);
   DMA_DeInit(txChan);
 
@@ -352,7 +352,7 @@ static int xchng_datablock(SPI_TypeDef *SPIx, int half, const void *tbuf, void *
   }
   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
   DMA_Init(rxChan, &DMA_InitStructure);
-  
+
   if (tbuf) {
     DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)tbuf;
     DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
@@ -373,7 +373,7 @@ static int xchng_datablock(SPI_TypeDef *SPIx, int half, const void *tbuf, void *
 
   // Wait for completion
   while (DMA_GetFlagStatus(dmaflag) == RESET) { ; }
-  
+
   // Disable channels
   DMA_Cmd(rxChan, DISABLE);
   DMA_Cmd(txChan, DISABLE);

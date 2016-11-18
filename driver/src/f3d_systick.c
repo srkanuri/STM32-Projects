@@ -1,41 +1,41 @@
-/* f3d_systick.c --- 
- * 
+/* f3d_systick.c ---
+ *
  * Filename: f3d_systick.c
- * Description: 
+ * Description:
  * Author: Bryce Himebaugh
- * Maintainer: 
+ * Maintainer:
  * Created: Thu Nov 14 07:57:37 2013
- * Last-Updated: 11/09/2016
+ * Last-Updated: 11/17/2016
  *           By: Raghavendra Nataraj(natarajr), Srikanth Kanuri(srkanuri)
- *     Update #: 1
- * Keywords: 
- * Compatibility: 
- * 
+ *     Update #: 2
+ * Keywords:
+ * Compatibility:
+ *
  */
 
-/* Commentary: 
- * 
- * 
- * 
+/* Commentary:
+ *
+ *
+ *
  */
 
 /* Change log:
- * 
- * 
+ *
+ *
  */
 
-/* Copyright (c) 2004-2007 The Trustees of Indiana University and 
- * Indiana University Research and Technology Corporation.  
- * 
- * All rights reserved. 
- * 
- * Additional copyrights may follow 
+/* Copyright (c) 2004-2007 The Trustees of Indiana University and
+ * Indiana University Research and Technology Corporation.
+ *
+ * All rights reserved.
+ *
+ * Additional copyrights may follow
  */
 
 /* Code: */
 
 #include <f3d_systick.h>
-#include <f3d_led.h> 
+#include <f3d_led.h>
 #include <f3d_user_btn.h>
 #include <f3d_nunchuk.h>
 

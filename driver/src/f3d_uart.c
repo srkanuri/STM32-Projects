@@ -5,9 +5,9 @@
   *          Raghavendra Nataraj (natarajr)
   * Date Created: 09/23/2016
   * Last Modified by: Srikanth Kanuri
-  * Date Last Modified: 11/09/2016
-  * Assignment: Lab4, Lab5, Lab10
-  * Part of: Lab4, Lab5, Lab10
+  * Date Last Modified: 11/17/2016
+  * Assignment: Lab4, Lab5, Lab10, Lab11
+  * Part of: Lab4, Lab5, Lab10, Lab11
  ***************************************************************/
 
 #include <stm32f30x.h>
@@ -20,7 +20,7 @@ int RxOverflow = 0;
 queue_t rxbuf, txbuf;
 
 void flush_uart(void) {
-  USART_ITConfig(USART1,USART_IT_TXE,ENABLE); 
+  USART_ITConfig(USART1,USART_IT_TXE,ENABLE);
 }
 
 //Function name: f3d_uart_init
@@ -38,7 +38,7 @@ void f3d_uart_init(void) {
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOC,&GPIO_InitStructure);
   GPIO_PinAFConfig(GPIOC,4,GPIO_AF_7);
-  GPIO_PinAFConfig(GPIOC,5,GPIO_AF_7);  
+  GPIO_PinAFConfig(GPIOC,5,GPIO_AF_7);
 
   USART_InitTypeDef USART_InitStructure;
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
@@ -51,7 +51,7 @@ void f3d_uart_init(void) {
   // Initialize the rx and tx queues
   init_queue(&rxbuf);
   init_queue(&txbuf);
-  
+
   // Setup the NVIC priority and subpriority
   NVIC_InitTypeDef NVIC_InitStructure;
   NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
@@ -60,7 +60,7 @@ void f3d_uart_init(void) {
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
-  // Enable the RX interrupt 
+  // Enable the RX interrupt
   USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
 }
 
@@ -78,7 +78,7 @@ int putchar(int c) {
     TxPrimed = 1;
     flush_uart();
   }
-} 
+}
 
 //Function name: getchar
 //Description: gets a character

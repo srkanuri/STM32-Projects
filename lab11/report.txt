@@ -1,0 +1,43 @@
+ ***************************************************************
+ * Team: Raghavendra Nataraj (natarajr)
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 11/17/2016
+ * Assignment: Lab11
+ ***************************************************************
+  **************          LAB11 REPORT         *****************
+ ***************************************************************
+Learnings and Challanges:
+We implemented the DMA functions in both the LCD display and the Audio driver files for a faster throughput of the Images, Audio.
+We developed a way to view the audio files, Image files and also display them on the LCD screen. If text, image or audio files are
+present they can be played. The others will give out a message that they are invalid formats. If the audio is being played and the
+user wants to stop the audio it cannot be stopped. We implemented a solution for this where we used the systick interrupt to monitor
+the nunchuk key press and exit the audio when it is being played. We understood how a DMA makes the transfer very fast when compared
+to polling and interrupt driven approach for large files.
+
+Q1: What is the significance of the peripheral base address? Where does it point?
+A:  The peripheral base address holds the starting address of the device which is connected to with SPI.
+    We need to be caruful of the devices connected to the DMA channels and each channel support only a spcific set of peripheral.
+    It points to the data register of SPI channel.
+
+Q2: Why is it necessary to enable incrementing as was done in this step? What will the DMA controller do in response to this configuration.
+A:  Incrementing is done in this step to make sure the data is completely read from the memory by moving to the next memory address after a read/write.
+    If incrementing was disbaled, the data will continue to be transferred/recieved from the same address.
+    This is needed, for example, in an unidirectional read operation.
+
+Q3: Why is this line of the code necessary?
+A:  This piece of code is for the processor to do a busy wait until the DMA transfer is complete. While acceptable in embedded environment,
+    it would be better if there was a DMA interrupt so that it can raised once the transfer is complete. This would make DMA more efficient.
+
+Q4. For transfers of less than 4 bytes, what do you think is the reason for not using the xchng_datablock functions?
+A:  For transfers which need less that 4 bytes, it would be better if the processor directly takes care of the operation, since setting up the
+    DMA structures, initalizing the Tx and Rx channels of DMA and starting the transfer would require more space and processing power than a
+    processor make the transfer directly.
+
+Q5. Why is it important for the DMA controller and the audio player to work on differnt portions of Audiobuf.
+A:  For audio to play out correctly, and for the audio player to output the correct samples, the data has to be provided at precise intervals.
+    We use timer2 for this purpose to load the data precisely. Since this is a time sensitive operation, the DMA controller which fetches the
+    data from memory to DAC and the audio player which plays the fetched data have to work on separate memory locations. This would ensure that
+    there are no lags present in playing the audio. We have a 512 byte audio buffer which is used in this process. The DMA controller populates
+    the lower half of the buffer and generates an interrupt to DAC so that it can start reading the data. Once, the DAC starts playing the lower half,
+    the DMA controller beings loading the upper half of the buffer. It again generates an interrupt once it is loaded. This way the DMA controller
+    and the Audio player always work on different portions of Audio buffer and avoid any jitter/lag in playing the audio file.

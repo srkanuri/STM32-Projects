@@ -1,35 +1,35 @@
-/* f3d_dac.c --- 
- * 
+/* f3d_dac.c ---
+ *
  * Filename: f3d_dac.c
- * Description: 
+ * Description:
  * Author: Bryce Himebaugh
- * Maintainer: 
+ * Maintainer:
  * Created: Mon Nov 18 14:09:52 2013
- * Last-Updated: 
- *           By: 
- *     Update #: 0
- * Keywords: 
- * Compatibility: 
- * 
+ * Last-Updated: 11/17/2016
+ *           By: Raghavendra Nataraj(natarajr), Srikanth Kanuri(srkanuri)
+ *     Update #: 1
+ * Keywords:
+ * Compatibility:
+ *
  */
 
-/* Commentary: 
- * 
- * 
- * 
+/* Commentary:
+ *
+ *
+ *
  */
 
 /* Change log:
- * 
- * 
+ *
+ *
  */
 
-/* Copyright (c) 2004-2007 The Trustees of Indiana University and 
- * Indiana University Research and Technology Corporation.  
- * 
- * All rights reserved. 
- * 
- * Additional copyrights may follow 
+/* Copyright (c) 2004-2007 The Trustees of Indiana University and
+ * Indiana University Research and Technology Corporation.
+ *
+ * All rights reserved.
+ *
+ * Additional copyrights may follow
  */
 
 /* Code: */
@@ -43,17 +43,17 @@ int audioplayerWhole = 0;
 
 const uint16_t Sine12bit[32] = {
   2047, 2447, 2831, 3185, 3498, 3750, 3939, 4056, 4095, 4056,
-  3939, 3750, 3495, 3185, 2831, 2447, 2047, 1647, 1263, 909, 
-  599, 344, 155, 38, 0, 38, 155, 344, 599, 909, 1263, 1647};    
+  3939, 3750, 3495, 3185, 2831, 2447, 2047, 1647, 1263, 909,
+  599, 344, 155, 38, 0, 38, 155, 344, 599, 909, 1263, 1647};
 const uint8_t Escalator8bit[6] = {0x0, 0x33, 0x66, 0x99, 0xCC, 0xFF};
 
-void f3d_dac_init(void) {  
+void f3d_dac_init(void) {
   GPIO_InitTypeDef GPIO_InitStructure;
   // RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA , ENABLE);
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);	
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
-  
-  GPIO_StructInit(&GPIO_InitStructure);  
+
+  GPIO_StructInit(&GPIO_InitStructure);
   //GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4|GPIO_Pin_5;
   // Only may pin 4 analog input, pin 5 is used for the gyro clock
   GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
@@ -79,11 +79,11 @@ void f3d_dac_channel_setup(void) {
   //  DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
   DAC_Init(DAC_Channel_1, &DAC_InitStructure);
   DAC_Cmd(DAC_Channel_1, ENABLE);
-  
+
   /* DMA_StructInit(&DMA_InitStructure); */
   DMA_InitStructure.DMA_PeripheralBaseAddr = DAC_DHR8R2_ADDRESS;
   // DMA_InitStructure.DMA_PeripheralBaseAddr = &DAC->DHR8R2;
- 
+
   // DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)&Sine12bit;
   DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)&Audiobuf;
   // DMA_InitStructure.DMA_BufferSize = 32;
@@ -124,7 +124,7 @@ void f3d_dac_channel_setup(void) {
 void DMA2_Channel4_5_IRQHandler(void) {
   static int ht_flag = 0;
   static int tc_flag = 0;
-  
+
   // Half Transfer Flag
   if (DMA_GetFlagStatus(DMA2_FLAG_HT4)==SET) {
     DMA_ClearITPendingBit(DMA2_IT_HT4);
@@ -139,7 +139,7 @@ void DMA2_Channel4_5_IRQHandler(void) {
     /* ht_flag ^=1; */
   }
 
-  // Full Transfer Flag 
+  // Full Transfer Flag
   if (DMA_GetFlagStatus(DMA2_FLAG_TC4)==SET) {
     DMA_ClearITPendingBit(DMA2_IT_TC4);
     audioplayerWhole = 1;
@@ -160,14 +160,14 @@ void DMA2_Channel4_5_IRQHandler(void) {
 }
 
 void audioplayerStart(void) {
-  
+
   // Clear the state
   DMA_ClearITPendingBit(DMA2_IT_TC4);
   DMA_ClearITPendingBit(DMA2_IT_HT4);
   audioplayerHalf = 0;
   audioplayerWhole = 0;
 
-  // Enable everything 
+  // Enable everything
   DMA_Cmd(DMA2_Channel4, ENABLE);
   DAC_Cmd(DAC_Channel_1, ENABLE);
   DAC_DMACmd(DAC_Channel_1, ENABLE);
@@ -176,7 +176,7 @@ void audioplayerStart(void) {
 }
 
 void audioplayerStop(void) {
-  // Disable everything 
+  // Disable everything
   DMA_Cmd(DMA2_Channel4, DISABLE);
   DAC_Cmd(DAC_Channel_1, DISABLE);
   DAC_DMACmd(DAC_Channel_1, DISABLE);
