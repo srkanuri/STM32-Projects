@@ -25,8 +25,10 @@
 #include <f3d_nunchuk.h>
 #include <f3d_delay.h>
 #include <f3d_systick.h>
-#include <brick_game.h>
-
+#include "brick_game.h"
+#include <ff.h>
+#include <diskio.h>
+#include "bmp.h"
 
 int is_free = 1, pause;
 int lane_picker[] = {L1, L2, L3, L4, L5};
@@ -37,6 +39,20 @@ int score = 0;
 car ocars[MAX_CARS];
 uint16_t blank[300];
 int level = 1;
+FATFS Fatfs;		/* File system object */
+FIL Fil;		/* File object */
+BYTE Buff[5];		/* File read buffer */
+FRESULT rc;			/* Result code */
+DIR dir;			/* Directory object */
+FILINFO fno;			/* File information object */
+UINT bw, br;
+unsigned int retval;
+
+void die (FRESULT rc) {
+  printf("Failed with rc=%u.\n", rc);
+  while (1);
+}
+
 void erase_car(car val){
   int i = 0, j = 0, x = val.prev_x, y = val.prev_y;
   f3d_lcd_setAddrWindow(x,y,x+14,y+19,MADCTLGRAPHICS);
@@ -150,10 +166,37 @@ void gen_cars(){
   }
 }
 
+void get_hi_score(){
+  printf("In get hi score\n");
+  rc = f_open(&Fil, "brick.hs", FA_READ);
+  if(rc){
+    rc = f_open(&Fil, "brick.hs", FA_WRITE | FA_CREATE_ALWAYS);
+    if (rc) die(rc);
+  }
+  rc = f_read(&Fil, Buff, sizeof Buff, &br);
+  if (rc) die(rc);
+  printf("Hi Score %s",Buff);
+  rc = f_close(&Fil);
+  if (rc) die(rc);
+}
+
+void set_hi_score(int value){
+  char val[5];
+  rc = f_open(&Fil, "_brick.hs", FA_WRITE);
+  if (rc) die(rc);
+  sprintf(val, "%d", value);
+  rc = f_write(&Fil, val, 5, &bw);
+  if (rc) die(rc);
+  rc = f_close(&Fil);
+  if (rc) die(rc);
+}
+
 int main(void) {
   // If you have your inits set up, this should turn your LCD screen red
   int i;
   int duration = 100;
+  f3d_delay_init();
+  f3d_rtc_init();
   f3d_led_init();
   f3d_user_btn_init();
   f3d_lcd_init();
@@ -171,6 +214,8 @@ int main(void) {
   setvbuf(stdout, NULL, _IONBF, 0);
   setvbuf(stderr, NULL, _IONBF, 0);
   f3d_systick_init();
+  printf("Before mounting FS\n");
+  f_mount(0, &Fatfs);
   f3d_lcd_fillScreen2(BLACK);
   draw_score_board();
   //f3d_nunchuk_read(&temp);
@@ -185,6 +230,7 @@ int main(void) {
     ocars[i].x=0;
     ocars[i].y=0;
   }
+  get_hi_score();
   while(1){
     printf("Pause %d:\n", pause);
     if(!pause){
