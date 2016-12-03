@@ -27,66 +27,51 @@
 #include <f3d_systick.h>
 #include <brick_game.h>
 
-#define L1 0
-#define L2 20
-#define L3 40
-#define L4 60
-#define L5 80
-#define SCOREBOARD 100
-#define MAXY 180
-#define MINY -20
-#define MAX_CARS 10
 
-int is_free = 1;
+int is_free = 1, pause;
 int lane_picker[] = {L1, L2, L3, L4, L5};
-int speed = 5;
+int speed = 5, car_width = 15, car_length = 20;
 car user;
+int inc;
+int score = 0;
 car ocars[MAX_CARS];
-
+uint16_t blank[300];
+int level = 1;
 void erase_car(car val){
-  int i = 0, j = 0, x = val.prev_x, y = val.prev_y, color = BLACK;
-  for(i = 0; i<15; i++){
-   for(j = 0; j<20; j++){
-	if(j>=15){
-	  if(i < 5 || i >= 10)
-	    f3d_lcd_drawPixel(x+i, y+j, color);
-	}
-	if(j>=10 && j<15){
-	  if(i >= 5 && i < 10)
-	    f3d_lcd_drawPixel(x+i, y+j, color);
-	}
-	if(j>=5 && j<10){
-	  f3d_lcd_drawPixel(x+i, y+j, color);
-	}
-	if(j<5){
-	  if(i >= 5 && i < 10)
-	    f3d_lcd_drawPixel(x+i, y+j, color);
-	}
-      }
-  }
+  int i = 0, j = 0, x = val.prev_x, y = val.prev_y;
+  f3d_lcd_setAddrWindow(x,y,x+14,y+19,MADCTLGRAPHICS);
+  f3d_lcd_pushColor(blank,300);
 }
 
 void draw_car(car val){
   int i = 0, j = 0, x = val.x, y = val.y, color = val.type;
+  uint16_t buff[300];
   for(i = 0; i<15; i++){
-   for(j = 0; j<20; j++){
-	if(j>=15){
-	  if(i < 5 || i >= 10)
-	    f3d_lcd_drawPixel(x+i, y+j, color);
-	}
-	if(j>=10 && j<15){
-	  if(i >= 5 && i < 10)
-	    f3d_lcd_drawPixel(x+i, y+j, color);
-	}
-	if(j>=5 && j<10){
-	  f3d_lcd_drawPixel(x+i, y+j, color);
-	}
-	if(j<5){
-	  if(i >= 5 && i < 10)
-	    f3d_lcd_drawPixel(x+i, y+j, color);
-	}
+    for(j = 0; j<20; j++){
+      if(j>=15){
+	if(i < 5 || i >= 10)
+	  buff[(j*car_width)+i]=color;
+	else
+	  buff[(j*car_width)+i]=BLACK;
       }
+      if(j>=10 && j<15){
+	if(i >= 5 && i < 10)
+	  buff[(j*car_width)+i]=color;
+	else
+	  buff[(j*car_width)+i]=BLACK;
+      }
+      if(j>=5 && j<10)
+	buff[(j*car_width)+i]=color;
+      if(j<5){
+	if(i >= 5 && i < 10)
+	  buff[(j*car_width)+i]=color;
+	else
+	  buff[(j*car_width)+i]=BLACK;
+      }
+    }
   }
+  f3d_lcd_setAddrWindow(x,y,x+14,y+19,MADCTLGRAPHICS);
+  f3d_lcd_pushColor(buff,300);
 }
 
 void redraw_car(car *val){
@@ -96,22 +81,45 @@ void redraw_car(car *val){
   draw_car(*val);
 }
 
-void move_cars(){
-  int i = 0;
-  if(user.x != user.prev_x){
+int move_cars(){
+  int i=0, collision_x=0, collision_y=0;
+  if(user.x != user.prev_x || user.y != user.prev_y){
     redraw_car(&user);
   }
   for(;i<MAX_CARS;i++){
+    collision_x = 0;
+    collision_y = 0;
     if(ocars[i].used){
       ocars[i].prev_x = ocars[i].x;
       ocars[i].prev_y = ocars[i].y;
       ocars[i].y += speed;
-      if(ocars[i].y >= 180)
+      if(ocars[i].y >= 165){
 	ocars[i].used = 0;
+	score+=inc;
+	char scr[3];
+	sprintf(scr,"%d",score);
+	f3d_lcd_drawString(SCOREBOARD+1,110,scr,RED,BLACK);
+      }
       else
 	redraw_car(&ocars[i]);
+      //Check Collision condition
+      if(user.x > ocars[i].x && user.x < ocars[i].x+car_width)
+	collision_x = 1;
+      if(user.x+car_width > ocars[i].x && user.x+car_width < ocars[i].x+car_width)
+	collision_x = 1;
+      if(user.y > ocars[i].y && user.y < ocars[i].y+car_length)
+	collision_y = 1;
+      if(user.y+car_length > ocars[i].y && user.y+car_length < ocars[i].y+car_length)
+	collision_y = 1;
+      if(collision_y && user.x==ocars[i].x && user.x+car_width==ocars[i].x+car_width)
+	collision_x = 1;
+      if((collision_x && collision_y)){
+	printf("Crash details %d,%d,%d,%d",ocars[i].x,user.x,ocars[i].y,user.y);
+	return 1;
+      }                                                                                                                                                                                                                                                                                   
     }
   }
+  return 0;
 } 
 
 
@@ -120,6 +128,10 @@ void draw_score_board(){
   int j = 0;
   for(j = 0; j<160; j++)
     f3d_lcd_drawPixel(SCOREBOARD, j, WHITE);
+  f3d_lcd_drawString(SCOREBOARD+1,40,"LVL",RED,BLACK);
+  f3d_lcd_drawString(SCOREBOARD+1,50,"1",RED,BLACK);
+  f3d_lcd_drawString(SCOREBOARD+1,100,"SCR",RED,BLACK);
+  f3d_lcd_drawString(SCOREBOARD+1,110,"0",RED,BLACK);
 }
 
 void gen_cars(){
@@ -131,7 +143,7 @@ void gen_cars(){
 	break;
     }
     ocars[k].x = ocars[i].prev_x = lane_picker[lane];
-    ocars[k].y = ocars[i].prev_x = 0;
+    ocars[k].y = ocars[i].prev_y = -20;
     ocars[k].used = 1;
     ocars[k].type = BLUE;
     draw_car(ocars[k]);
@@ -141,6 +153,7 @@ void gen_cars(){
 int main(void) {
   // If you have your inits set up, this should turn your LCD screen red
   int i;
+  int duration = 100;
   f3d_led_init();
   f3d_user_btn_init();
   f3d_lcd_init();
@@ -151,17 +164,17 @@ int main(void) {
   f3d_accel_init();
   delay(10);
   f3d_mag_init();
+  delay(10);
   f3d_nunchuk_init();
   delay(10);
   setvbuf(stdin, NULL, _IONBF, 0);
   setvbuf(stdout, NULL, _IONBF, 0);
   setvbuf(stderr, NULL, _IONBF, 0);
   f3d_systick_init();
-  nunchuk_t temp;
   f3d_lcd_fillScreen2(BLACK);
   draw_score_board();
   //f3d_nunchuk_read(&temp);
-  int k = 10;
+  int k = 15;
   user.x = 0;
   user.y = user.prev_y = 140;
   user.type = WHITE;
@@ -173,14 +186,39 @@ int main(void) {
     ocars[i].y=0;
   }
   while(1){
-    if(k == 10){
-      printf("Gen Cars Called");
-      gen_cars();
-      k = 0;
+    printf("Pause %d:\n", pause);
+    if(!pause){
+      if(k == 15){
+	printf("Gen Cars Called");
+	gen_cars();
+	k = 0;
+      }
+      printf("Z value %d\n", temp.z);
+      if(temp.z){
+	delay(20);
+	inc = 2;
+      }else{
+	delay(duration/level);
+	inc = 1;
+      }
+      printf("%d k",k);
+      if(move_cars()){
+	printf("Crash at %d, %d\n",user.x, user.y);
+	f3d_lcd_fillScreen2(BLACK);
+	f3d_lcd_drawString(0,10,"GAME OVER !!!",RED,BLACK);
+	pause = 1;
+	printf("outside");
+	while(1){
+	  printf("Inside");
+	  f3d_led_all_off();
+	  delay(100);
+	  f3d_led_all_on();
+	  delay(100);
+	}
+	break;
+      }
+      k++;
     }
-    printf("%d k",k);
-    move_cars();
-    k++;
   }
 }
 

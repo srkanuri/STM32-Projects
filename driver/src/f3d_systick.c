@@ -38,18 +38,21 @@
 #include <f3d_led.h>
 #include <f3d_user_btn.h>
 #include <f3d_nunchuk.h>
+#include <brick_game.h>
+#include <f3d_lcd_sd.h>
+#include <math.h>
+#include <stdio.h>
 
-extern nunchuk_t temp;
-extern int playing_audio;
+nunchuk_t temp;
 int exit_interrupt = 0;
 volatile int systick_flag = 0;
 int led_cnt = 0;
-
+float pitch, roll;
+int time = 0;
 void f3d_systick_init(void) {
   f3d_led_init();
+  f3d_led_all_off();
   f3d_user_btn_init();
-//f3d_nunchuk_init();
-//delay(10);
   SysTick_Config(SystemCoreClock/100);
 }
 
@@ -57,19 +60,73 @@ void f3d_systick_change(int interval){
   SysTick_Config(SystemCoreClock/interval);
 }
 
+void accel(){
+  //Variables
+  float adata[3];
+  float xa, ya, za;
+  //Read Accel and Magnetometer values
+  f3d_accel_read(adata);
+  xa  = adata[0];
+  ya = adata[1];
+  za = adata[2];
+  //Calculation of pitch. roll and heading
+  pitch = atan2(xa, (sqrt(pow(ya,2)+pow(za,2))));
+  roll = atan2(ya, sqrt(pow(xa,2)+pow(za,2))); 
+}
+
+
 void SysTick_Handler(void){
-  /*if(user_btn_read())
-    f3d_systick_change(10);
-  else
-    f3d_systick_change(100);
-  f3d_led_off(led_cnt);
-  led_cnt++;
-  if(led_cnt == 8)
-    led_cnt =0;
-    f3d_led_on(led_cnt);*/
+  if(user_btn_read()){
+    pause = !pause;
+    delay(10);
+  }
+  if(!pause){
+    time+=1;
+    if(time%100==0){
+      f3d_led_on(led_cnt);
+      led_cnt++;
+    }
+    
+    if(time>=900){
+
+      time = 0;
+      led_cnt =0;
+      level++;
+      char lvl[3];
+      sprintf(lvl,"%d",level);
+      f3d_lcd_drawString(SCOREBOARD+1,50,lvl,RED,BLACK);
+
+      f3d_led_all_off();
+    }
+  }
   f3d_nunchuk_read(&temp);
-  if(temp.z && playing_audio)
-    exit_interrupt = 1;
+  accel();
+  /* if(temp.z && playing_audio) */
+  /*   exit_interrupt = 1; */
+  if(user.prev_x == user.x && user.prev_y == user.y){
+    user.prev_x = user.x;
+    user.prev_y = user.y;
+    if(temp.jx == 0x00 || roll >= 0.2){
+      if(user.x >= 5){
+	user.x -= speed;
+      }
+    }
+    if(temp.jx == 0xff || roll <= -0.2){
+      if(user.x <= 80){
+	user.x += speed;
+      }
+    }
+     if(temp.jy == 0x00 || pitch <= -0.2){
+      if(user.y <= 135){
+	user.y += speed;
+      }
+    }
+    if(temp.jy == 0xff || pitch >= 0.2){
+      if(user.y >= 5){
+	user.y -= speed;
+      }
+    }
+  }
 }
 
 /* f3d_systick.c ends here */
