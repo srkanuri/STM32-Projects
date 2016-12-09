@@ -1,5 +1,15 @@
 TEMPLATEROOT = ..
-
+ #***************************************************************
+ # Makefile for final project
+ # Author: Raghavendra Nataraj (natarajr)
+ #         Quintin Lepper (qlepper)
+ #         Srikanth Kanuri (srkanuri)
+ # Date Created: 11/21/2016
+ # Last Modified by: Srikanth Kanuri (srkanuri)
+ # Date Last Modified: 12/8/2016
+ # Assignment: Final Project
+ # Part of: Final Project
+ #***************************************************************
 # compilation flags for gdb
 
 CFLAGS  = -O1 -g
