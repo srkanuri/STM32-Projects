@@ -102,11 +102,10 @@ void SysTick_Handler(void){
       }
 
       if(time>=900){
-
+	
 	time = 0;
 	led_cnt =0;
-	level++;
-	playAudio("level.wav");
+	old_level=level++;
 	char lvl[3];
 	sprintf(lvl,"%d",level);
 	f3d_lcd_drawString(SCOREBOARD+1,50,lvl,WHITE,RED);

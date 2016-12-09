@@ -50,7 +50,7 @@ int playing_audio = 0;
 int inc, score = 0;
 car ocars[MAX_CARS];
 uint16_t blank[300];
-int level = 1;
+int old_level=1, level = 1;
 FATFS Fatfs;		/* File system object */
 FIL Fil;		/* File object */
 BYTE Buff[5];		/* File read buffer */
@@ -73,7 +73,7 @@ void die (FRESULT rc) {
 //Function to read the disk for the file
 void readckhd(FIL *fid, struct ckhd *hd, uint32_t ckID) {
   f_read(fid, hd, sizeof(struct ckhd), &ret);
-  printf("Size read %d, Actual Size %d",ret,sizeof(struct ckhd));
+  //printf("Size read %d, Actual Size %d",ret,sizeof(struct ckhd));
   if (ret != sizeof(struct ckhd))
     exit(-1);
   if (ckID && (ckID != hd->ckID))
@@ -150,7 +150,7 @@ void print_instructions(){
 
 //Fetches the hi score from the SD card
 void get_hi_score(){
-  printf("In get hi score\n");
+  //printf("In get hi score\n");
   rc = f_open(&Fil, "_brick.hs", FA_READ);
   if(rc){
     rc = f_open(&Fil, "_brick.hs", FA_READ | FA_CREATE_ALWAYS);
@@ -160,7 +160,7 @@ void get_hi_score(){
   else{
     rc = f_read(&Fil, Buff, sizeof Buff, &br);
     if (rc) die(rc);
-    printf("Hi Score %s",Buff);
+    //printf("Hi Score %s",Buff);
     hiscore = atoi(Buff);
   }
   rc = f_close(&Fil);
@@ -419,7 +419,7 @@ int move_cars(){
       if(collision_y && user.x==ocars[i].x && user.x+car_width==ocars[i].x+car_width)
 	collision_x = 1;
       if((collision_x && collision_y)){
-	printf("Crash details %d,%d,%d,%d",ocars[i].x,user.x,ocars[i].y,user.y);
+	//printf("Crash details %d,%d,%d,%d",ocars[i].x,user.x,ocars[i].y,user.y);
 	return 1;
       }
     }
@@ -465,14 +465,18 @@ void play_game(){
   }
   get_hi_score();
   while(1){
-    printf("Pause %d:\n", pause);
+    if(old_level!=level){
+      old_level = level;
+      playAudio("level.wav");
+    }
+    //printf("Pause %d:\n", pause);
     if(!pause){
       if(k == 15){
-	printf("Gen Cars Called");
+	//printf("Gen Cars Called");
 	gen_cars();
 	k = 0;
       }
-      printf("Z value %d\n", temp.z);
+      //printf("Z value %d\n", temp.z);
       if(temp.z){
 	delay(20);
 	inc = 2;
@@ -480,15 +484,15 @@ void play_game(){
 	delay(duration/level);
 	inc = 1;
       }
-      printf("%d k",k);
+      //printf("%d k",k);
       if(move_cars()){
 	//play_g = 0;
 	//printf("Crash at %d, %d\n",user.x, user.y);
 	f3d_lcd_fillScreen2(BLACK);
 	f3d_lcd_drawString(20,80,"GAME OVER !!!",RED,BLACK);
+	pause = 1;
 	playAudio("crash.wav");
 	readImage("CAR.BMP");
-	pause = 1;
 	if(score > hiscore)
 	  set_hi_score(score);
 	f3d_lcd_fillMenuScreen(RED, 0, 40);
@@ -498,11 +502,11 @@ void play_game(){
 	  delay(100);
 	  f3d_led_all_on();
 	  delay(100);
-	  printf("%d\n",option);
+	  //printf("%d\n",option);
 	  if(main_toggle && temp.jy == 0x00){
 	    i = option;
 	    ++option;
-	    printf("%d\n",option);
+	    //printf("%d\n",option);
 	    if(option == 4)
 	      option = 0;
 	    draw_menu(option, i);
@@ -578,7 +582,6 @@ int main(void) {
   f3d_lcd_fillScreen2(BLACK);
   readImage("WELCOME.BMP");
   f3d_lcd_fillMenuScreen(WHITE, level, ST7735_height-1);
-  //draw_menu(0, -1);
   f3d_lcd_drawString(0,level,"Press c to Start Game",BLACK, WHITE);
   while(!play_g)
     playAudio("welcome.wav");

@@ -54,5 +54,5 @@ extern int speed;
 extern int pause;
 extern int level;
 extern int score;
-
+extern int old_level;
 #endif /*BRICK_H*/
