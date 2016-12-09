@@ -1,0 +1,39 @@
+***************************************************************
+ * Team: Raghavendra Nataraj (natarajr)
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 12/09/2016
+ * Assignment: Final Project (Brick Racing)
+ ***************************************************************
+  **************         PROJECT REPORT       *****************
+ ***************************************************************
+1. Description of game concept and core functionality:
+   This is a racing game inspired from Brick Racing which we have played during our childhood days.
+   A white car is controlled by user either with a nunchuck or a with a gyroscope. The directions dictate
+   how the car moves and the z button accelerates the car. The user button can be used to pause the game.
+   These are mainly the user controls. The game has 15 levels and each level is present for 80 seconds.
+   We have reduced the time for ease in testing. With each level the speed of the Opponent cars increases.
+   All the Opponent cars are in Blue color. The score is incremented for every passing opponent car. This
+   is double when the user is accelerating with the car. The is a momentary pause with sound to show that
+   the level has been passed. The LED are used as a timer device for the game letting the user know how
+   much time is left for completing the level. If the user comes in contact with the opponent car, the
+   game will end with a crash. We have used a "Game Over" text with crash sound and an image to depcit that.
+   Once the game ends, the user is presented with a menu to restart the game or check the instructions,
+   look at the highest score and to view author information. There is also a welcome image and music before
+   the game starts.
+
+   We did not implement gyroscope, magnetometer since it was not needed for the project.
+   We used printf statements to print on screen for debugging purposes.
+
+
+2. Task Breakdown:
+   a. [Ragha] - Welcome Screen with audio
+   b. [Srikanth] - Opponent Cars flow and random generation
+   c. [Ragha] - User car and operation control with Nunchuck
+   d. [Ragha] - User car motion with Accelerometer
+   e. [Ragha] - Levels and timers with LEDs
+   f. [Ragha] - Pause Button
+   g. [Srikanth] - Crash detection
+   h. [Ragha] - Game over screen with audio and LED Blinks
+   i. [Srikanth] - Scoring
+   j. [Srikanth] - Game over menu
+   k. [Srikanth] - Documentation and Report Writeup

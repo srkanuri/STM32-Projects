@@ -6,9 +6,9 @@
  *         Srikanth Kanuri (srkanuri)
  * Date Created: 09/30/2016
  * Last Modified by: Srikanth Kanuri (srkanuri)
- * Date Last Modified: 11/17/2016
- * Assignment: Lab9, Lab6, Lab11
- * Part of: Lab9,Lab6, Lab11
+ * Date Last Modified: 12/8/2016
+ * Assignment: Lab9, Lab6, Lab11, Final
+ * Part of: Lab9,Lab6, Lab11, Final
  ***************************************************************/
 
 /* Change log:
@@ -260,6 +260,26 @@ void f3d_lcd_fillScreen2(uint16_t color) {
   uint16_t x[ST7735_width];
   for (y = 0; y < ST7735_width; y++) x[y] = color;
   f3d_lcd_setAddrWindow (0,0,ST7735_width-1,ST7735_height-1,MADCTLGRAPHICS);
+  for (y=0;y<ST7735_height; y++) {
+    f3d_lcd_pushColor(x,ST7735_width);
+  }
+}
+
+void f3d_lcd_fillScoreBoard(int init, uint16_t color) {
+  uint8_t y;
+  uint16_t x[ST7735_width-init];
+  for (y = 0; y < ST7735_width-init; y++) x[y] = color;
+  f3d_lcd_setAddrWindow (init,0,ST7735_width-1,ST7735_height-1,MADCTLGRAPHICS);
+  for (y=0;y<ST7735_height; y++) {
+    f3d_lcd_pushColor(x,ST7735_width-init);
+  }
+}
+
+void f3d_lcd_fillMenuScreen(uint16_t color, int ystart, int yend) {
+  uint8_t y;
+  uint16_t x[ST7735_width];
+  for (y = 0; y < ST7735_width; y++) x[y] = color;
+  f3d_lcd_setAddrWindow (0,ystart,ST7735_width-1,yend,MADCTLGRAPHICS);
   for (y=0;y<ST7735_height; y++) {
     f3d_lcd_pushColor(x,ST7735_width);
   }

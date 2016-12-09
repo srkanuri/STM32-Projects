@@ -1,0 +1,58 @@
+***************************************************************
+ * Team: Raghavendra Nataraj (natarajr)
+ *       Srikanth Kanuri (srkanuri)
+ * Date Created: 12/09/2016
+ * Assignment: Final Project (Brick Racing)
+ ***************************************************************
+  **************          LAB REPORT         *****************
+ ***************************************************************
+
+1. Describe each of the tasks that you were responsible for performing and how each contributed to the overall project.
+A: a. Opponent Cars flow and random generation
+      We prepared the car structure containing the car type, x and y coordinates and also the previous values.
+      We have generated a random number using rand() once for the number of cars and again for the position of the car.
+      It is also made sure that there cant be more than 15 cars in the screen at any point of time using an array.
+      This number was obtained after running tests to see for minimal issues with playing the game. Each car is built in
+      a 15X20 area and it starts at -20 and ends rendering at 180. Once the car crosses 180 is removed from the list.
+      We initially used drawPixel function to render the car. But this made the cards very slow particularly when there
+      were a lot of cars in the screen. To rectify this delay, we used pushColor function and built the buffer using
+      setAddressWindow function. This made the cars almost twice as fast but there was one problem we had to settle with.
+      The moment the car crosses the 160 pixel, there seems to be some distortion in the way it prints the pixels on
+      screen. We tried to fix this issue in a lot of ways but nothing seems to have worked.
+
+   b. Crash detection
+      The crash detection happens when the user's x and y coordinates and x+15, y+20 collide with the dimensions of the
+      opponent cars. We had to test this a lot to check the edge cases and fix the issues caused. Once the crash happens,
+      we pause the game and start with the game over functionality.
+
+   c. Scoring
+      The scoring happens the same time when any car is being removed from the opponent cars list. If z is currently pressed,
+      we increment the score by 2 else 1 is added to it. Since this is governed by the de-allocation of cars it did not need
+      any additional maintenance. The hi score value is always fetched at the start of the game and if the current play is
+      scoring more than the hi score, it is updated with latest score and saved to the file _brick.hs
+
+   d. Game over menu
+      Once a collision happens, and the audio file, image is displayed, we added an additional menu to have the following:
+      . Restart Game
+      . Instructions
+      . High Score
+      . Creators
+      Instead of displaying the hi score in a new page, tried to dislpay in in the same line and removing it once the
+      cursor moves away. This needed additional handling. I also made sure to re-render only those menu options which
+      recently changed to ensure reduced work on the system. The reset function resets the code and starts the game from
+      beginning. We invoked the ResetHandler() to make this happen.
+
+   e. Documentation and Report Writeup
+      I took car of documenting the code, adding comments and also writing up the final report for the project.
+
+2. What technical challenges did you encounter in completing your tasks?
+A: The pushColor implementation was difficult since we had to load the buffer differently. Handling the Nunchuck values in
+   main program made it difficult to handle both move cars and also the user car. So we had to move the code to systick
+   handler and handle it there. Implementing the hi score was also challenging to clean the text and render it back.
+   The boards were also difficult to get as everyone was busy with their projects.
+
+3. What would you do differently if you could start the project over?
+   If I could have more time, I would make the DMA work in transparent mode to make it work seamless with the game.
+   I would also implement red car functionality which would add more randomness to the game. We would also implement
+   our own random function to generate new values. I would also add Gyroscope to change the velocity of car with respect
+   to the movement speed of the board.
